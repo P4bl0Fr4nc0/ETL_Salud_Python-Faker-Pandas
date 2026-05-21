@@ -2,6 +2,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 import time 
 
+#tiempo de inicio del proceso
 inicio = time.time()
 print ("Iniciando ETL con datos sinteticos Sector Salud con MySQL")
 
@@ -23,4 +24,24 @@ df["Nivel_Prioridad"]= pd.cut(df["Dias_Espera"], bins=[-1, 7, 21, 100], labels= 
 
 print(f"Transformados: {len(df)} registros válidos")
 
+#Mostrar los primeros 5 registros para validar
 print(df.head())
+
+#Cargar datos a MySql
+print("-----Comienza carga a MySQL-----")
+
+#Definir variables para conexion a la base de datos
+usuario = "$USER"
+password ="$PASS"
+host = "$HOST"
+puerto = "$PORT"
+database = "salud"
+
+#Conexion a la base de datos con su driver
+engine = create_engine(f"mysql+pymysql://{usuario}:{password}@{host}:{puerto}/{database}")
+df.to_sql('Expedientes_Salud', engine, if_exists='replace', index=False)
+
+#tiempo de finalizacion del proceso
+fin = time.time()
+print(f"Se ha completado el ETL: {len(df)} registros cargados en {round(fin-inicio,2)} segundos")
+print(f"Tabla lista en MySQL en la base de datos: {database} y tabla Expedientes_Salud")
