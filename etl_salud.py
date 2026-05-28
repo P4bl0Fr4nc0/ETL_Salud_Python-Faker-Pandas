@@ -2,6 +2,9 @@ import pandas as pd
 from sqlalchemy import create_engine
 import time 
 
+import os 
+from dotenv import load_dotenv
+
 #tiempo de inicio del proceso
 inicio = time.time()
 print ("Iniciando ETL con datos sinteticos Sector Salud con MySQL")
@@ -31,13 +34,14 @@ print(df.head())
 print("-----Comienza carga a MySQL-----")
 
 #Definir variables para conexion a la base de datos
-usuario = "$USER"
-password ="$PASS"
-host = "$HOST"
-puerto = "$PORT"
-database = "salud"
+load_dotenv()
+usuario = os.getenv("MYSQL_USER")
+password = os.getenv("MYSQL_PASS")
+host = os.getenv("MYSQL_HOST")
+puerto = os.getenv("MYSQL_PORT")
+database = os.getenv("MYSQL_DB_NAME")
 
-#Conexion a la base de datos con su driver
+#Conexion a la base de datos con su driver y carga de tabla
 engine = create_engine(f"mysql+pymysql://{usuario}:{password}@{host}:{puerto}/{database}")
 df.to_sql('Expedientes_Salud', engine, if_exists='replace', index=False)
 

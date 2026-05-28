@@ -1,10 +1,7 @@
 CREATE DATABASE Salud;
 Use Salud;
-
 Select * From expedientes_salud;
-
 Select * From expedientes_salud WHERE Nivel_Prioridad = 'Alta';
-
 SELECT
     Institucion,
 
@@ -14,7 +11,7 @@ SELECT
 
     MAX(Dias_Espera) AS Espera_Maxima,
 
-    ROUND(AVG(Dias_Espera),2) AS Espera_Promedio
+    ROUND(AVG(Dias_Espera)) AS Espera_Promediodatos
 
 FROM expedientes_salud
 
